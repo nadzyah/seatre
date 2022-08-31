@@ -36,7 +36,12 @@ def run_arp_spoofing(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--debug", help="Enable the debug mode", default=False)
+    parser.add_argument(
+        "--debug",
+        help="Enable the debug mode",
+        default=False,
+        action="store_true",
+    )
     subparser = parser.add_subparsers(
         dest="attack",
         help="Enter the attack name",

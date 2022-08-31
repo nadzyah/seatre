@@ -14,14 +14,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 from setuptools import setup
+import codecs
+import os
+
+here = os.path.abspath(os.path.dirname(__file__))
+
+with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
+    long_description = "\n" + fh.read()
 
 INSTALL_REQUIRES = []
 
 setup(
     name="hackme",
-    version="0.1",
+    version="0.1.0",
     py_modules=["hackmeapp"],
-    description="A collection of scripts that implement some network attacks",
+    description="Scripts that implement different network attacks",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     packages=["hackme"],
     zip_safe=False,
     install_requires=INSTALL_REQUIRES,
