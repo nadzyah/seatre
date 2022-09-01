@@ -1,0 +1,24 @@
+[project]
+name = "hackme"
+version = "0.1.0"
+authors = [
+  { name="Nadzeya Hutsko", email="nadzya.info@gmail.com" },
+]
+description = "Scripts that implement different network attacks"
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.10"
+classifiers = [
+    "Environment :: Console",
+    "Intended Audience :: Security Engineers",
+    "Intended Audience :: Network Engineers",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: GPL-3.0 License",
+    "Operating System :: Ubuntu 22.04 LTS",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/nadzyah/hackme"
+"Bug Tracker" = "https://github.com/nadzyah/hackme/issues"
