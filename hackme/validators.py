@@ -28,7 +28,7 @@ def make_valid_mac_address(mac):
     Then convert it to the next format: b"\xaa\xaa\xaa\xaa\xaa\xaa"
     """
     if mac is None:
-        return
+        return mac
     if not re.match(
         "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})|([0-9a-fA-F]{4}\\."
         "[0-9a-fA-F]{4}\\.[0-9a-fA-F]{4})$",
@@ -41,10 +41,10 @@ def make_valid_mac_address(mac):
     return binascii.unhexlify(mac.replace(":", "").replace("-", ""))
 
 
-def validate_ip_address(ip):
+def validate_ip_address(ip_addr):
     """Check if IPv4 address is valid"""
     try:
-        ip_address(ip)
+        ip_address(ip_addr)
     except ValueError as exc:
         raise exc
-    return ip
+    return ip_addr
