@@ -23,3 +23,6 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/nadzyah/hackme"
 "Bug Tracker" = "https://github.com/nadzyah/hackme/issues"
+
+[project.entry-points.console_scripts]
+hackme = "hackmeapp:main"
