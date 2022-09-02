@@ -34,7 +34,7 @@ def run_arp_spoofing(arp_spoofer, gw_mac, gw_ip, victim_mac, victim_ip):
     arp_spoofer.run()
 
 
-def main():
+def main():  # pylint: disable=R0915
     """The orchestration function"""
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -133,6 +133,7 @@ def main():
             )
         except Exception as exc:
             _LOGGER.error(exc)
+            sys.exit(1)
 
     elif args.attack == "syn_flood":
         try:
@@ -148,6 +149,7 @@ def main():
             syn_flooder.run()
         except Exception as exc:
             _LOGGER.error("\n%s", exc)
+            sys.exit(1)
 
 
 if __name__ == "__main__":

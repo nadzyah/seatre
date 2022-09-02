@@ -26,3 +26,6 @@ classifiers = [
 
 [project.entry-points.console_scripts]
 hackme = "hackmeapp:main"
+
+[tool.black]
+line-length = 79

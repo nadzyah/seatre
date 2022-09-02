@@ -47,7 +47,7 @@ class ARPSpoofer:
                 "Creating an ARPSpoofer object with your interface %s"
                 " and MAC-address %s",
                 self.interface,
-                self.mac,
+                your_mac,
             )
         self.description = textwrap.dedent(
             """\
