@@ -1,6 +1,6 @@
 [project]
 name = "hackme"
-version = "0.1.0"
+version = "0.2.0"
 authors = [
   { name="Nadzeya Hutsko", email="nadzya.info@gmail.com" },
 ]

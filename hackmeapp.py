@@ -47,6 +47,8 @@ def main():
         dest="attack",
         help="Enter the attack name",
     )
+
+    # The ARP spofing subparser
     parser_arp_spoof = subparser.add_parser(
         "arp_spoof", help="The ARP spoofing attack"
     )
@@ -56,7 +58,9 @@ def main():
         help="Your network interface (i.e. wlp2s0)",
     )
     parser_arp_spoof.add_argument(
-        "-m", "--mac", help="The MAC address of your network interface"
+        "-m",
+        "--mac",
+        help="The MAC address of your network interface",
     )
     parser_arp_spoof.add_argument(
         "-gm", "--gwmac", help="The gateway's MAC address"
@@ -71,6 +75,23 @@ def main():
         "-vip", "--victip", help="The victim's IPv4 address"
     )
     parser_arp_spoof.add_argument(
+        "--desc", help="Print attack description", action="store_true"
+    )
+
+    # The SYN flood subparser
+    parser_syn_flood = subparser.add_parser(
+        "syn_flood", help="The SYN flood attack"
+    )
+    parser_syn_flood.add_argument(
+        "-d", "--destIP", help="Destination IP address"
+    )
+    parser_syn_flood.add_argument(
+        "-p", "--port", help="Destination port number"
+    )
+    parser_syn_flood.add_argument(
+        "-c", "--count", "-c", help="Number of packets"
+    )
+    parser_syn_flood.add_argument(
         "--desc", help="Print attack description", action="store_true"
     )
 
@@ -112,6 +133,21 @@ def main():
             )
         except Exception as exc:
             _LOGGER.error(exc)
+
+    elif args.attack == "syn_flood":
+        try:
+            syn_flooder = SYNFlooder(  # noqa: F405
+                args.destIP, args.port, args.count
+            )
+            if args.desc:
+                print(syn_flooder.description)
+                sys.exit(0)
+            if all((args.destIP, args.port, args.count)) is False:
+                parser_syn_flood.print_help()
+                sys.exit(0)
+            syn_flooder.run()
+        except Exception as exc:
+            _LOGGER.error("\n%s", exc)
 
 
 if __name__ == "__main__":
