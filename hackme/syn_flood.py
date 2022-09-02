@@ -102,9 +102,6 @@ class SYNFlooder:  # pylint: disable=R0903
                 _LOGGER.info("\nTotal packets sent: %i\n", total)
                 _LOGGER.warning("\nStopping SYN flood attack")
                 sys.exit(0)
-            except Exception as exc:
-                _LOGGER.error(exc)
-                sys.exit(1)
 
         progress_bar(self.count, self.count)
         _LOGGER.warning("\nTotal packets sent: %i\n", total)
