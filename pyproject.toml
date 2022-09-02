@@ -6,6 +6,7 @@ authors = [
 ]
 description = "Scripts that implement different network attacks"
 readme = "README.md"
+dependencies = ['pylintfileheader', 'scapy']
 license = { file="LICENSE" }
 requires-python = ">=3.10"
 classifiers = [
