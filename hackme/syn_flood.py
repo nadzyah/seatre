@@ -47,7 +47,10 @@ class SYNFlooder:  # pylint: disable=R0903
         """
         self.dst_ip = validate_ip_address(dst_ip)
         self.dst_port = validate_port(dst_port)
-        self.count = int(count)
+        if count is None:
+            self.count = 9223372036854775807
+        else:
+            self.count = int(count)
         if dst_ip and dst_port and count:
             _LOGGER.debug(
                 "Creating a SYNFlooder object with destination IP %s"
@@ -58,6 +61,14 @@ class SYNFlooder:  # pylint: disable=R0903
         self.description = textwrap.dedent(
             """\
             The SYN flood attack description:
+
+            A SYN flood is a form of denial-of-service attack in which
+            an attacker rapidly initiates a connection to a server without
+            finalizing the connection. The server has to spend resources
+            waiting for half-opened connections, which can consume enough
+            resources to make the system unresponsive to legitimate traffic.
+
+            Read more: https://www.wikiwand.com/en/SYN_flood
             """
         )
 
@@ -85,8 +96,9 @@ class SYNFlooder:  # pylint: disable=R0903
         """
         total = 0
         _LOGGER.warning(
-            "Packets are sending. Press Ctrl+C to stop before"
-            " all the packets will be sent"
+            "Trying to send %i packets. Press Ctrl+C to "
+            "stop before all the packets will be sent",
+            self.count,
         )
 
         for x in range(0, self.count):  # pylint: disable=C0103

@@ -104,7 +104,7 @@ def progress_bar(it, total):  # pylint: disable=C0103
     Print progress BAR as percentage of it out of total
     """
     fillwith = "#"
-    dec = 1
+    dec = 2
     leng = 50
     percent = ("{0:." + str(dec) + "f}").format(100 * (it / float(total)))
     fill_length = int(leng * it // total)

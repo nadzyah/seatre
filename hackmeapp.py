@@ -20,8 +20,11 @@
 import sys
 import argparse
 import logging
+from warnings import filterwarnings
 
-from hackme import *  # pylint: disable=W0401  # noqa: F403
+filterwarnings("ignore")
+
+from hackme import *  # pylint: disable=W0401,C0413  # noqa: F403,E402
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -89,7 +92,10 @@ def main():  # pylint: disable=R0915
         "-p", "--port", help="Destination port number"
     )
     parser_syn_flood.add_argument(
-        "-c", "--count", "-c", help="Number of packets"
+        "-c",
+        "--count",
+        "-c",
+        help="Number of packets. Default 9223372036854775807",
     )
     parser_syn_flood.add_argument(
         "--desc", help="Print attack description", action="store_true"
@@ -143,7 +149,7 @@ def main():  # pylint: disable=R0915
             if args.desc:
                 print(syn_flooder.description)
                 sys.exit(0)
-            if all((args.destIP, args.port, args.count)) is False:
+            if all((args.destIP, args.port)) is False:
                 parser_syn_flood.print_help()
                 sys.exit(0)
             syn_flooder.run()
