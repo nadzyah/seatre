@@ -44,3 +44,16 @@ where:
 * `192.168.0.1` — the gateway's IP-address
 * `cc:cc:cc:cc:cc:cc` — the victim's MAC-address
 * `192.168.0.108` — the victim's IP-address
+
+## SYN Flood
+
+You can read about this attack [here](https://www.wikiwand.com/en/SYN_flood)
+
+Example usage:
+```bash
+$ sudo hackme syn_flood -d 172.17.17.10 -p 443 -c 1000
+```
+where:
+* `172.17.17.10` — server's IP-address
+* `443` — server's port
+* `1000` — the number of packets to be sent 
