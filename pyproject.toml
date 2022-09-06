@@ -1,11 +1,12 @@
 [project]
 name = "hackme"
-version = "0.1.0"
+version = "0.2.0"
 authors = [
   { name="Nadzeya Hutsko", email="nadzya.info@gmail.com" },
 ]
 description = "Scripts that implement different network attacks"
 readme = "README.md"
+dependencies = ['pylintfileheader', 'scapy']
 license = { file="LICENSE" }
 requires-python = ">=3.10"
 classifiers = [
@@ -22,3 +23,9 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/nadzyah/hackme"
 "Bug Tracker" = "https://github.com/nadzyah/hackme/issues"
+
+[project.entry-points.console_scripts]
+hackme = "hackmeapp:main"
+
+[tool.black]
+line-length = 79
