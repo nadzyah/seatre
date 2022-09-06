@@ -18,8 +18,10 @@
 
 
 from hackme.arp_spoofing import ARPSpoofer
+from hackme.syn_flood import SYNFlooder
 
 
 __all__ = [
     "ARPSpoofer",
+    "SYNFlooder",
 ]
