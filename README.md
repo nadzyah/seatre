@@ -1,7 +1,11 @@
 
 # Hack Me
 
-A collection of scripts that implement different network attacks. **For information purposes only.**
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+[![GitHub license](https://img.shields.io/github/license/nadzyah/hackme?style=for-the-badge)](https://github.com/nadzyah/hackme/blob/main/LICENSE)
+
+A collection of scripts that implement different network attacks. **For information purposes only.** 
 
 Any contributor to this project doesn't take any responsibility for illegal usage of any script from this project.
 
@@ -30,7 +34,7 @@ To get the attack description in the terminal, enter `hackme <attack> --desc`
 
 ## ARP Spoofing
 
-You can read about this attack [here](https://www.wikiwand.com/en/ARP_spoofing)
+You can read about ARP spoofing attack [here](https://www.wikiwand.com/en/ARP_spoofing).
 
 Example usage:
 
@@ -45,9 +49,11 @@ where:
 * `cc:cc:cc:cc:cc:cc` — the victim's MAC-address
 * `192.168.0.108` — the victim's IP-address
 
+Run `sudo hackme arp_spoof --help` to get more information.
+
 ## SYN Flood
 
-You can read about this attack [here](https://www.wikiwand.com/en/SYN_flood)
+You can read about SYN flood attack [here](https://www.wikiwand.com/en/SYN_flood).
 
 Example usage:
 ```bash
@@ -56,4 +62,7 @@ $ sudo hackme syn_flood -d 172.17.17.10 -p 443 -c 1000
 where:
 * `172.17.17.10` — server's IP-address
 * `443` — server's port
-* `1000` — the number of packets to be sent 
+* `1000` — the number of packets to be sent
+
+Run `sudo hackme syn_flood --help` to get more information.
+
