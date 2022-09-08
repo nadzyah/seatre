@@ -48,7 +48,7 @@ class SYNFlooder:  # pylint: disable=R0903
         self.dst_ip = validate_ip_address(dst_ip)
         self.dst_port = validate_port(dst_port)
         if count is None:
-            self.count = 9223372036854775807
+            self.count = 9_223_372_036_854_775_807
         else:
             self.count = int(count)
         if dst_ip and dst_port and count:
