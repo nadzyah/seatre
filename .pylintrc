@@ -1,6 +1,6 @@
 [MAIN]
 
-disable=W0201,W0703,C0114
+disable=W0201,W0703,C0114,R0801
 
 load-plugins=pylintfileheader
 

