@@ -28,7 +28,7 @@ INSTALL_REQUIRES = ["pylintfileheader", "scapy"]
 
 setup(
     name="hackme",
-    version="0.2.0",
+    version="0.3.0",
     py_modules=["hackmeapp"],
     description="Scripts that implement different network attacks",
     long_description=long_description,
