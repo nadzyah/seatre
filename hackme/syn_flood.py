@@ -80,7 +80,7 @@ class SYNFlooder:  # pylint: disable=R0903
         return IP_Packet
 
     def _create_tcp_packet(self):
-        """Create an IP packet with random source port"""
+        """Create a TCP packet with random source port"""
         TCP_Packet = TCP()  # pylint: disable=C0103
         TCP_Packet.sport = random_port()
         TCP_Packet.dport = self.dst_port
