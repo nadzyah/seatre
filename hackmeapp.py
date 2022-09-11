@@ -37,7 +37,7 @@ def run_arp_spoofing(arp_spoofer, gw_mac, gw_ip, victim_mac, victim_ip):
     arp_spoofer.run()
 
 
-def main():  # pylint: disable=R0915
+def main():  # pylint: disable=R0915,R0912
     """The orchestration function"""
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -52,52 +52,72 @@ def main():  # pylint: disable=R0915
     )
 
     # The ARP spofing subparser
-    parser_arp_spoof = subparser.add_parser(
-        "arp_spoof", help="The ARP spoofing attack"
+    parser_arpspoof = subparser.add_parser(
+        "arpspoof", help="The ARP spoofing attack"
     )
-    parser_arp_spoof.add_argument(
+    parser_arpspoof.add_argument(
         "-i",
         "--iface",
         help="Your network interface (i.e. wlp2s0)",
     )
-    parser_arp_spoof.add_argument(
+    parser_arpspoof.add_argument(
         "-m",
         "--mac",
         help="The MAC address of your network interface",
     )
-    parser_arp_spoof.add_argument(
+    parser_arpspoof.add_argument(
         "-gm", "--gwmac", help="The gateway's MAC address"
     )
-    parser_arp_spoof.add_argument(
+    parser_arpspoof.add_argument(
         "-gip", "--gwip", help="The gateway's IPv4 address"
     )
-    parser_arp_spoof.add_argument(
+    parser_arpspoof.add_argument(
         "-vm", "--victmac", help="The victim's MAC address"
     )
-    parser_arp_spoof.add_argument(
+    parser_arpspoof.add_argument(
         "-vip", "--victip", help="The victim's IPv4 address"
     )
-    parser_arp_spoof.add_argument(
+    parser_arpspoof.add_argument(
         "--desc", help="Print attack description", action="store_true"
     )
 
     # The SYN flood subparser
-    parser_syn_flood = subparser.add_parser(
-        "syn_flood", help="The SYN flood attack"
+    parser_synflood = subparser.add_parser(
+        "synflood", help="The SYN flood attack"
     )
-    parser_syn_flood.add_argument(
+    parser_synflood.add_argument(
         "-d", "--destIP", help="Destination IP address"
     )
-    parser_syn_flood.add_argument(
+    parser_synflood.add_argument(
         "-p", "--port", help="Destination port number"
     )
-    parser_syn_flood.add_argument(
+    parser_synflood.add_argument(
         "-c",
         "--count",
         "-c",
         help="Number of packets. Default 9223372036854775807",
     )
-    parser_syn_flood.add_argument(
+    parser_synflood.add_argument(
+        "--desc", help="Print attack description", action="store_true"
+    )
+
+    # The UDP flood subparser
+    parser_udpflood = subparser.add_parser(
+        "udpflood", help="The UDP flood attack"
+    )
+    parser_udpflood.add_argument(
+        "-d", "--destIP", help="Destination IP address"
+    )
+    parser_udpflood.add_argument(
+        "-p", "--port", help="Destination port number"
+    )
+    parser_udpflood.add_argument(
+        "-c",
+        "--count",
+        "-c",
+        help="Number of packets. Default 9223372036854775807",
+    )
+    parser_udpflood.add_argument(
         "--desc", help="Print attack description", action="store_true"
     )
 
@@ -113,7 +133,7 @@ def main():  # pylint: disable=R0915
     if args.attack is None:
         parser.print_help()
 
-    if args.attack == "arp_spoof":
+    if args.attack == "arpspoof":
         try:
             arp_spoofer = ARPSpoofer(args.iface, args.mac)  # noqa: F405
             if args.desc:
@@ -132,7 +152,7 @@ def main():  # pylint: disable=R0915
                 )
                 is False
             ):
-                parser_arp_spoof.print_help()
+                parser_arpspoof.print_help()
                 sys.exit(0)
             run_arp_spoofing(
                 arp_spoofer, args.gwmac, args.gwip, args.victmac, args.victip
@@ -141,7 +161,7 @@ def main():  # pylint: disable=R0915
             _LOGGER.error(exc)
             sys.exit(1)
 
-    elif args.attack == "syn_flood":
+    elif args.attack == "synflood":
         try:
             syn_flooder = SYNFlooder(  # noqa: F405
                 args.destIP, args.port, args.count
@@ -150,9 +170,25 @@ def main():  # pylint: disable=R0915
                 print(syn_flooder.description)
                 sys.exit(0)
             if all((args.destIP, args.port)) is False:
-                parser_syn_flood.print_help()
+                parser_synflood.print_help()
                 sys.exit(0)
             syn_flooder.run()
+        except Exception as exc:
+            _LOGGER.error("\n%s", exc)
+            sys.exit(1)
+
+    elif args.attack == "udpflood":
+        try:
+            udp_flooder = UDPFlooder(  # noqa: F405
+                args.destIP, args.port, args.count
+            )
+            if args.desc:
+                print(udp_flooder.description)
+                sys.exit(0)
+            if all((args.destIP, args.port)) is False:
+                parser_udpflood.print_help()
+                sys.exit(0)
+            udp_flooder.run()
         except Exception as exc:
             _LOGGER.error("\n%s", exc)
             sys.exit(1)
