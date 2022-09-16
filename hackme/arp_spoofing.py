@@ -96,9 +96,7 @@ class ARPSpoofer:
 
     def run(self):
         """Run the ARP spoofing attack until KeyboardInterrupt"""
-        _LOGGER.warning(
-            "Running the ARP spoofing attack. Press Ctrl+C to stop"
-        )
+        _LOGGER.info("Running the ARP spoofing attack. Press Ctrl+C to stop")
         protocol = self._make_prototcol_headers()
         gateway_packet = self._make_packet_for_gateway()
         victim_packet = self._make_packet_for_victim()

@@ -20,10 +20,12 @@
 from hackme.arp_spoofing import ARPSpoofer
 from hackme.syn_flood import SYNFlooder
 from hackme.udp_flood import UDPFlooder
+from hackme.mac_flood import MACFlooder
 
 
 __all__ = [
     "ARPSpoofer",
     "SYNFlooder",
     "UDPFlooder",
+    "MACFlooder",
 ]

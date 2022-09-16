@@ -39,7 +39,7 @@ _LOGGER = logging.getLogger(__name__)
 class UDPFlooder:  # pylint: disable=R0903
     """A class that represents a UDP flood attack"""
 
-    def __init__(self, dst_ip, dst_port, count):
+    def __init__(self, dst_ip, dst_port, count=None):
         """
         Initialaze a UDP flood object
 
@@ -100,7 +100,7 @@ class UDPFlooder:  # pylint: disable=R0903
         or the number of all packets is sent
         """
         total = 0
-        _LOGGER.warning(
+        _LOGGER.info(
             "Trying to send %i packets. Press Ctrl+C to "
             "stop before all the packets will be sent",
             self.count,
@@ -128,4 +128,4 @@ class UDPFlooder:  # pylint: disable=R0903
                 sys.exit(0)
 
         progress_bar(self.count, self.count)
-        _LOGGER.warning("\nTotal packets sent: %i\n", total)
+        _LOGGER.info("\nTotal packets sent: %i\n", total)
