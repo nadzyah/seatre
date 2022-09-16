@@ -14,7 +14,7 @@
 #
 # Written by:
 #        Nadzeya Hutsko <nadzya.info@gmail.com>
-"""The module for SYN flood class"""
+"""The module for SYNFlooder class"""
 
 
 import sys
@@ -38,7 +38,7 @@ _LOGGER = logging.getLogger(__name__)
 class SYNFlooder:  # pylint: disable=R0903
     """A class that represents a SYN flood attack"""
 
-    def __init__(self, dst_ip, dst_port, count):
+    def __init__(self, dst_ip, dst_port, count=None):
         """
         Initialaze a SYN flood object
 
@@ -123,4 +123,4 @@ class SYNFlooder:  # pylint: disable=R0903
                 sys.exit(0)
 
         progress_bar(self.count, self.count)
-        _LOGGER.warning("\nTotal packets sent: %i\n", total)
+        _LOGGER.info("\nTotal packets sent: %i\n", total)

@@ -44,7 +44,7 @@ Example usage:
 $ sudo hackme --debug arpspoof -i wlp2s0 -m aa:aa:aa:aa:aa:aa -gm BB-BB-BB-BB-BB-BB -gip 192.168.0.1 -vm cc:cc:cc:cc:cc:cc -vip 192.168.0.108
 ```
 where:
-* `wlp22s0` — your network interface
+* `wlp2s0` — your network interface
 * `aa:aa:aa:aa:aa:aa` — the interface MAC-address (can be written as `AA:AA:AA:AA:AA:AA`, `AA-AA-AA-AA-AA-AA` and `aa-aa-aa-aa-aa-aa`)
 * `bb:bb:bb:bb:bb:bb` — the gateway's MAC-address
 * `192.168.0.1` — the gateway's IP-address
@@ -82,4 +82,19 @@ where:
 * `1000` — the number of packets to be sent
 
 Run `sudo hackme udpflood --help` to get more information.
+
+## MAC Flood
+
+You can read about MAC flood attack [here](https://www.wikiwand.com/en/MAC_flooding).
+
+Example usage:
+```bash
+$ sudo hackme --debug macflood -i lxdbr0 -vm "aa:aa:aa:aa:aa:aa" -c 100000
+```
+where:
+* `lxdbr0` — your network interface
+* `aa:aa:aa:aa:aa:aa` — the victim's MAC-address (can be written as `AA:AA:AA:AA:AA:AA`, `AA-AA-AA-AA-AA-AA` and `aa-aa-aa-aa-aa-aa`)
+* `100000` — the number of packets to be sent
+
+Run `sudo hackme macflood --help` to get more information.
 

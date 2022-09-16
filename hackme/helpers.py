@@ -77,7 +77,11 @@ def validate_port(port):
 
 
 def random_MAC():  # pylint: disable=C0103
-    """Generate random MAC-address"""
+    """
+    Generate random MAC-address
+
+    :return: MAC address in the aa:aa:aa:aa:aa:aa format
+    """
     return "%02x:%02x:%02x:%02x:%02x:%02x" % (  # pylint: disable=C0209
         randint(0, 255),
         randint(0, 255),
@@ -100,9 +104,7 @@ def random_port():
 
 
 def progress_bar(it, total):  # pylint: disable=C0103
-    """
-    Print progress BAR as percentage of it out of total
-    """
+    """Print progress BAR as percentage of it out of total"""
     fillwith = "#"
     dec = 2
     leng = 50
