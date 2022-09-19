@@ -216,6 +216,7 @@ def main():  # pylint: disable=R0915,R0912
         except Exception as exc:
             _LOGGER.error("\n%s", exc, exc_info=True)
             sys.exit(1)
+
     elif args.attack == "macflood":
         try:
             mac_flooder = MACFlooder(  # noqa: F405

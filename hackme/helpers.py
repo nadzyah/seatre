@@ -93,18 +93,31 @@ def random_MAC():  # pylint: disable=C0103
 
 
 def random_IP():  # pylint: disable=C0103
-    """Generate random IPv4-address"""
+    """
+    Generate random IPv4-address
+
+    :return: a string that represents IPv4 address
+    """
     ip_addr = ".".join(map(str, (randint(0, 255) for _ in range(4))))
     return ip_addr
 
 
 def random_port():
-    """Generate random port"""
+    """
+    Generate random port
+
+    :return: a random integer between 10000 and 65529
+    """
     return randint(10000, 65530)
 
 
 def progress_bar(it, total):  # pylint: disable=C0103
-    """Print progress BAR as percentage of it out of total"""
+    """
+    Print progress BAR as percentage of it out of total
+
+    :it: the current number of items
+    :total: the total number of items
+    """
     fillwith = "#"
     dec = 2
     leng = 50
