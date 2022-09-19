@@ -73,14 +73,22 @@ class SYNFlooder:  # pylint: disable=R0903
         )
 
     def _create_ip_packet(self):
-        """Create an IP packet with random source IP"""
+        """
+        Create an IP packet with random source IP
+
+        :return: scapy IP object
+        """
         IP_Packet = IP()  # pylint: disable=C0103
         IP_Packet.src = random_IP()
         IP_Packet.dst = self.dst_ip
         return IP_Packet
 
     def _create_tcp_packet(self):
-        """Create a TCP packet with random source port"""
+        """
+        Create a TCP packet with random source port
+
+        :return: scapy TCP packet
+        """
         TCP_Packet = TCP()  # pylint: disable=C0103
         TCP_Packet.sport = random_port()
         TCP_Packet.dport = self.dst_port

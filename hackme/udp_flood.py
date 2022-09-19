@@ -81,14 +81,22 @@ class UDPFlooder:  # pylint: disable=R0903
         )
 
     def _create_ip_packet(self):
-        """Create an IP packet with random source IP"""
+        """
+        Create an IP packet with random source IP
+
+        :return: scapy IP object
+        """
         IP_Packet = IP()  # pylint: disable=C0103
         IP_Packet.src = random_IP()
         IP_Packet.dst = self.dst_ip
         return IP_Packet
 
     def _create_udp_packet(self):
-        """Create a UDP packet with random source port"""
+        """
+        Create a UDP packet with random source port
+
+        :return: scapy UDP packet
+        """
         UDP_Packet = UDP()  # pylint: disable=C0103
         UDP_Packet.sport = random_port()
         UDP_Packet.dport = self.dst_port

