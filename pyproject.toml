@@ -1,12 +1,12 @@
 [project]
 name = "hackme"
-version = "0.4.0"
+version = "0.4.1"
 authors = [
   { name="Nadzeya Hutsko", email="nadzya.info@gmail.com" },
 ]
 description = "Scripts that implement different network attacks"
 readme = "README.md"
-dependencies = ['pylintfileheader', 'scapy']
+dependencies = ["pylintfileheader", "scapy", "wikipedia"]
 license = { text="GPL-3.0 license" }
 requires-python = ">=3.10"
 classifiers = [

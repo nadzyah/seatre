@@ -20,9 +20,13 @@
 import socket
 import sys
 import logging
-import textwrap
 
-from .helpers import random_MAC, make_valid_mac_address, progress_bar
+from .helpers import (
+    random_MAC,
+    make_valid_mac_address,
+    progress_bar,
+    get_description_from_wiki,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -52,18 +56,11 @@ class MACFlooder:  # pylint: disable=R0903
                 self.interface,
                 dst_mac,
             )
-        self.description = textwrap.dedent(
-            """\
-            MAC flooding is a technique employed to compromise the
-            security of network switches. The attack works by forcing
-            legitimate MAC table contents out of the switch and forcing
-            a unicast flooding behavior potentially sending sensitive
-            information to portions of the network where it is not
-            normally intended to go.
-
-            Read more: https://www.wikiwand.com/en/MAC_flooding
-            """
-        )
+        description = get_description_from_wiki("MAC flood")
+        if "does not match any pages" in description:
+            _LOGGER.error(description)
+            sys.exit(1)
+        self.description = description
 
     def run(self):
         """

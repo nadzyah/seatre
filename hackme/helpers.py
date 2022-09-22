@@ -17,8 +17,11 @@
 """Functions that are used by other scripts in this module"""
 
 
+import os
 import re
 import binascii
+import wikipedia
+from textwrap import fill
 from ipaddress import ip_address
 from random import randint
 
@@ -125,3 +128,21 @@ def progress_bar(it, total):  # pylint: disable=C0103
     fill_length = int(leng * it // total)
     prog_bar = fillwith * fill_length + "-" * (leng - fill_length)
     print(f"\rProgress |{prog_bar}| {percent}% Complete", end="\r")
+
+
+def get_description_from_wiki(name, width=None):
+    """
+    Return a pretty attack description from wikipedia
+
+    :name: the name of an article
+    :width: the text width
+    """
+    try:
+        page = wikipedia.page(name)
+    except wikipedia.exceptions.PageError as exc:
+        return str(exc)
+    if width is None:
+        width = os.get_terminal_size().columns * 0.7
+    result = fill(page.summary, width=width)
+    result += "\n\n" + "Source: " + page.url
+    return result

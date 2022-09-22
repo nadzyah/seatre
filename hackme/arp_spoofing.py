@@ -17,12 +17,16 @@
 """The module for ARP spoofing class"""
 
 
+import sys
 import socket
-import textwrap
 import time
 import logging
 
-from .helpers import make_valid_mac_address, validate_ip_address
+from .helpers import (
+    make_valid_mac_address,
+    validate_ip_address,
+    get_description_from_wiki,
+)
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -49,22 +53,11 @@ class ARPSpoofer:
                 self.interface,
                 your_mac,
             )
-        self.description = textwrap.dedent(
-            """\
-            The ARP spoofing attack description:
-
-            In computer networking, ARP spoofing, ARP cache poisoning,
-            or ARP poison routing, is a technique by which an attacker
-            sends (spoofed) Address Resolution Protocol (ARP) messages
-            onto a local area network.
-            Generally, the aim is to associate the attacker's MAC
-            address with the IP address of another host, such as the
-            default gateway, causing any traffic meant for that IP address
-            to be sent to the attacker instead.
-
-            Read more: https://www.wikiwand.com/en/ARP_spoofing
-            """
-        )
+        description = get_description_from_wiki("ARP Spoofing")
+        if "does not match any pages" in description:
+            _LOGGER.error(description)
+            sys.exit(1)
+        self.description = description
 
     def add_gateway(self, gateway_mac, gateway_ip):
         """

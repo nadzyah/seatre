@@ -18,7 +18,6 @@
 
 
 import sys
-import textwrap
 import logging
 from random import randint
 from scapy.all import IP, TCP, send  # pylint: disable=E0401,E0611
@@ -29,6 +28,7 @@ from .helpers import (
     validate_ip_address,
     validate_port,
     progress_bar,
+    get_description_from_wiki,
 )
 
 
@@ -58,19 +58,11 @@ class SYNFlooder:  # pylint: disable=R0903
                 self.dst_ip,
                 self.dst_port,
             )
-        self.description = textwrap.dedent(
-            """\
-            The SYN flood attack description:
-
-            A SYN flood is a form of denial-of-service attack in which
-            an attacker rapidly initiates a connection to a server without
-            finalizing the connection. The server has to spend resources
-            waiting for half-opened connections, which can consume enough
-            resources to make the system unresponsive to legitimate traffic.
-
-            Read more: https://www.wikiwand.com/en/SYN_flood
-            """
-        )
+        description = get_description_from_wiki("SYN flood")
+        if "does not match any pages" in description:
+            _LOGGER.error(description)
+            sys.exit(1)
+        self.description = description
 
     def _create_ip_packet(self):
         """
