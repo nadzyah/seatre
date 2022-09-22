@@ -20,10 +20,10 @@
 import os
 import re
 import binascii
-import wikipedia
 from textwrap import fill
 from ipaddress import ip_address
 from random import randint
+import wikipedia
 
 
 def make_valid_mac_address(mac):
