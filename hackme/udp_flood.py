@@ -18,10 +18,7 @@
 
 
 import sys
-
-# import socket
 import logging
-import textwrap
 from scapy.all import IP, UDP, send  # pylint: disable=E0401,E0611
 
 from .helpers import (
@@ -30,6 +27,7 @@ from .helpers import (
     validate_ip_address,
     validate_port,
     progress_bar,
+    get_description_from_wiki,
 )
 
 
@@ -59,26 +57,11 @@ class UDPFlooder:  # pylint: disable=R0903
                 self.dst_ip,
                 self.dst_port,
             )
-        self.description = textwrap.dedent(
-            """\
-            A UDP flood attack is a volumetric denial-of-service (DoS)
-            attack using the User Datagram Protocol (UDP), a
-            sessionless/connectionless computer networking protocol.
-
-            A UDP flood attack can be initiated by sending a large number
-            of UDP packets to random ports on a remote host. As a result,
-            the distant host will:
-              - Check for the application listening at that port;
-              - See that no application listens at that port;
-              - Reply with an ICMP Destination Unreachable packet.
-
-            Thus, for a large number of UDP packets, the victimized system
-            will be forced into sending many ICMP packets, eventually leading
-            it to be unreachable by other clients.
-
-            Read more: https://www.wikiwand.com/en/UDP_flood
-            """
-        )
+        description = get_description_from_wiki("UDP flood")
+        if "does not match any pages" in description:
+            _LOGGER.error(description)
+            sys.exit(1)
+        self.description = description
 
     def _create_ip_packet(self):
         """
