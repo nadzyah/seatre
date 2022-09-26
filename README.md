@@ -17,7 +17,7 @@ The tested environment:
 
 Make sure that `python3-scapy` is installed on your system: `sudo apt-get install python3-scapy`
 
-You can either run hackmeapp from a checkout of the code, or install it like any other python project. Keep in mind that a lot of scripts here can be executed only with the root privileges, so you need to run it with sudo.
+You can either run `hackmeapp.py` from a checkout of the code, or install it like any other python project. Keep in mind that a lot of scripts here can be executed only with the root privileges, so you need to run it with sudo.
 
 ```bash
 $ sudo pip3 install hackme
