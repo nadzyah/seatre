@@ -250,7 +250,7 @@ def main():  # pylint: disable=R0915,R0912
         "stpspoof": run_stpflood,
     }
     subparsers_map = {
-        "arpspoofer": parser_arpspoof,
+        "arpspoof": parser_arpspoof,
         "synflood": parser_synflood,
         "udpflood": parser_udpflood,
         "macflood": parser_macflood,
