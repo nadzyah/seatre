@@ -111,12 +111,15 @@ def main():  # pylint: disable=R0915,R0912
     parser.add_argument(
         "--debug",
         help="Enable the debug mode",
-        default=False,
-        action="store_true",
+        action="store_const",
+        dest="log_level",
+        default=logging.INFO,
+        const=logging.DEBUG,
     )
     subparser = parser.add_subparsers(
         dest="attack",
         help="Enter the attack name",
+        required=True,
     )
 
     # The ARP spofing subparser
@@ -236,16 +239,10 @@ def main():  # pylint: disable=R0915,R0912
 
     args = parser.parse_args()
 
-    format_str = "%(levelname)s [ %(funcName)s() ] %(message)s"
-
-    if args.debug:
-        logging.basicConfig(format=format_str, level=logging.DEBUG)
-    else:
-        logging.basicConfig(format=format_str, level=logging.INFO)
-
-    if args.attack is None:
-        parser.print_help()
-        sys.exit(1)
+    logging.basicConfig(
+        format="%(levelname)s [ %(funcName)s() ] %(message)s",
+        level=args.log_level,
+    )
 
     attack_func_mapping = {
         "arpspoof": run_arp_spoofing,
