@@ -79,11 +79,14 @@ def run_flooder(subparser, args):
 
 
 def run_stpflood(subparser, args):
-    bpdu_packet = BPDUPacket(    # noqa: F405
+    """Run BPDU spoof attack"""
+    bpdu_packet = BPDUPacket(  # noqa: F405
         args.iface, args.srcmac, args.dstmac, args.priority
     )
     if args.desc:
-        print(dedent("""\
+        print(
+            dedent(
+                """\
         On a Layer 2 network, switches running STP, RSTP, MSTP, or VBST
         exchange BPDUs to calculate a spanning tree and trim the ring network
         into a loop-free tree topology. If forged BPDUs are sent to attack a
@@ -92,7 +95,9 @@ def run_stpflood(subparser, args):
         the spanning tree. If the bridge priority in the BPDUs sent by an
         attacker is higher than the priority of the root bridge, the network
         topology will change, thereby interrupting service traffic.
-        """))
+        """
+            )
+        )
         sys.exit(0)
     if all((args.iface, args.srcmac, args.dstmac)) is False:
         subparser.print_help()

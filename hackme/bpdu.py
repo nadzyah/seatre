@@ -22,7 +22,6 @@ from struct import pack
 from time import sleep
 from binascii import unhexlify
 import logging
-from textwrap import dedent
 
 from .helpers import make_valid_mac_address
 
@@ -80,7 +79,7 @@ class BPDUPacket:
         forward_delay = b"\x0f\x00"
         vers_len = b"\x00"
 
-        self.payload = (
+        return (
             protocol_type
             + flags
             + root_id
@@ -103,7 +102,7 @@ class BPDUPacket:
         :priority: STP priority
         :return: bridgeID in HEX format
         """
-        if not (0 <= priority <= 61440):
+        if not 0 <= priority <= 61440:
             raise ValueError("Priority must be in range from 0 to 61440")
         if priority % 4096 != 0:
             raise ValueError("Priority must be divisible by 4096")
@@ -114,7 +113,6 @@ class BPDUPacket:
             "-", ""
         )
         _LOGGER.debug("Set Bridge ID %s", converted_priority + "." + mac)
-        print(str_bridge_id)
         return unhexlify(str_bridge_id.strip())
 
     def create_packet(self):
@@ -123,15 +121,15 @@ class BPDUPacket:
 
         :return: None
         """
-        self._create_payload()
+        payload = self._create_payload()
         llc_header = b"\x42\x42\x03"
         self.header = (
             self.dstmac
             + self.srcmac
-            + pack(">H", len(llc_header) + len(self.payload))
+            + pack(">H", len(llc_header) + len(payload))
             + llc_header
         )
-        return self.header + self.payload
+        return self.header + payload
 
     def send_multiple_bpdu_packets(self):
         """Send loads of BPDU packets"""
