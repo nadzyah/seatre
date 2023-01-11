@@ -88,7 +88,7 @@ def run_stpflood(subparser, args):
             dedent(
                 """\
         On a Layer 2 network, switches running STP, RSTP, MSTP, or VBST
-        exchange BPDUs to calculate a spanning tree and trim the ring network
+        exchange BPDUs to calculate a spanning tree and trim the network
         into a loop-free tree topology. If forged BPDUs are sent to attack a
         device with edge ports and received by them, the device will
         automatically change the edge ports to non-edge ports and recalculate
