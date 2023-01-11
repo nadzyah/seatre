@@ -86,7 +86,7 @@ class MACFlooder:  # pylint: disable=R0903
                 src_mac = make_valid_mac_address(rand_mac)
                 sock.sendall(self.dst_mac + src_mac + protocol + payload)
                 _LOGGER.debug(
-                    "Sending a packet #%i with <source_MAC> %s",
+                    "Sending a packet #%i with source_MAC %s",
                     x + 1,
                     rand_mac,
                 )

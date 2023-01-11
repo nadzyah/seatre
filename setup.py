@@ -24,7 +24,11 @@ here = os.path.abspath(os.path.dirname(__file__))
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
-INSTALL_REQUIRES = ["pylintfileheader", "scapy", "wikipedia"]
+INSTALL_REQUIRES = [
+    "pylintfileheader==0.3.2",
+    "scapy==2.4.5",
+    "wikipedia==1.4.0",
+]
 
 setup(
     name="hackme",
