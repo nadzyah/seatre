@@ -97,12 +97,12 @@ You can read about MAC flood attack [here](https://www.wikiwand.com/en/MAC_flood
 Example usage:
 
 ```bash
-$ sudo hackme --debug macflood -i lxdbr0 -vm "aa:aa:aa:aa:aa:aa" -c 100000
+$ sudo hackme --debug macflood -i wlp2s0 -vm "aa:aa:aa:aa:aa:aa" -c 100000
 ```
 
 where:
 
-* `lxdbr0` — your network interface
+* `wlp2s0` — your network interface
 * `aa:aa:aa:aa:aa:aa` — the victim's MAC-address (can be written as `AA:AA:AA:AA:AA:AA`, `AA-AA-AA-AA-AA-AA` and `aa-aa-aa-aa-aa-aa`)
 * `100000` — the number of packets to be sent
 
@@ -115,6 +115,10 @@ On a Layer 2 network, switches running STP, RSTP, MSTP, or VBST exchange BPDUs t
 Example usage:
 
 ```bash
-sudo ./hackmeapp.py --debug stpspoof -i lxdbr0 -smac "aa:aa:aa:aa:aa:aa" -dmac "bb:bb:bb:bb:bb:bb" -p 45056
+sudo ./hackmeapp.py --debug stpspoof -i wlp2s0 -smac "aa:aa:aa:aa:aa:aa" -dmac "bb:bb:bb:bb:bb:bb" -p 45056
 ```
 
+* `wlp2s0` — your network interface
+* `aa:aa:aa:aa:aa:aa` — your MAC-address
+* `bb:bb:bb:bb:bb:bb` — victim switch's MAC-address
+* `45056` — priority for choosing the root switch (the lower the number, the higher the priority, so make sure it's high enough to become the root)
