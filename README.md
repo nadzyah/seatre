@@ -115,10 +115,10 @@ On a Layer 2 network, switches running STP, RSTP, MSTP, or VBST exchange BPDUs t
 Example usage:
 
 ```bash
-sudo ./hackmeapp.py --debug stpspoof -i wlp2s0 -smac "aa:aa:aa:aa:aa:aa" -dmac "bb:bb:bb:bb:bb:bb" -p 45056
+sudo ./hackmeapp.py --debug stpspoof -i wlp2s0 -smac "aa:aa:aa:aa:aa:aa" -dmac "bb:bb:bb:bb:bb:bb" -p 4096
 ```
 
 * `wlp2s0` — your network interface
 * `aa:aa:aa:aa:aa:aa` — your MAC-address
 * `bb:bb:bb:bb:bb:bb` — victim switch's MAC-address
-* `45056` — priority for choosing the root switch (the lower the number, the higher the priority, so make sure it's low enough to become the root)
+* `4096` — priority for choosing the root switch (the lower the number, the higher the priority, so make sure it's low enough to become the root). Must be divisible by 4096
