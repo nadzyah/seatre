@@ -5,7 +5,7 @@
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 [![GitHub license](https://img.shields.io/github/license/nadzyah/hackme?style=for-the-badge)](https://github.com/nadzyah/hackme/blob/main/LICENSE)
 
-A collection of scripts that implement different network attacks. **For information purposes only.** 
+A collection of scripts that implement different network attacks. **For informational purposes only.** 
 
 Any contributor to this project doesn't take any responsibility for illegal usage of any script from this project.
 
