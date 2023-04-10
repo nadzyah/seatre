@@ -22,7 +22,7 @@ You can either run `hackmeapp.py` from a checkout of the code, or install it lik
 ```bash
 $ sudo pip3 install hackme
 $ sudo hackme
-usage: hackmeapp.py [-h] [--debug] {attack} ...
+usage: hackme [-h] [--debug] {attack} ...
 ```
 
 To enter the debug mode, use the `--debug` option after the `hackme` command.
