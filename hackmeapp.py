@@ -65,7 +65,7 @@ def run_flooder(subparser, args):
             subargs = [args.destIP, args.port, args.count]
             flooder = UDPFlooder(*subargs)  # noqa: F405
         case "macflood":
-            subargs = [args.iface, args.victmac]
+            subargs = [args.iface, args.victmac, args.count]
             flooder = MACFlooder(*subargs)  # noqa: F405
         case _:
             raise ValueError(f"Wrong attack name {args.attack}")
