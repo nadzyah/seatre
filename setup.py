@@ -32,7 +32,7 @@ INSTALL_REQUIRES = [
 
 setup(
     name="hackme",
-    version="0.4.1",
+    version="1.0.0",
     py_modules=["hackmeapp"],
     description="Scripts that implement different network attacks",
     long_description=long_description,
