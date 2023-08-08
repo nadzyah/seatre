@@ -5,9 +5,11 @@
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 [![GitHub license](https://img.shields.io/github/license/nadzyah/hackme?style=for-the-badge)](https://github.com/nadzyah/hackme/blob/main/LICENSE)
 
-A collection of scripts that implement different network attacks. **For informational purposes only.** 
+A collection of scripts that implement different network attacks. **For informational purposes only.**
 
-Any contributor to this project doesn't take any responsibility for illegal usage of any script from this project.
+See the article about how to use it [here](https://medium.com/@nadzeya/exploring-your-networks-vulnerabilities-can-you-hack-it-836aee46c156)
+
+Any contributor to this project doesn't take any responsibility for the illegal usage of any script from this project.
 
 # Installation and Usage
 
@@ -17,7 +19,7 @@ The tested environment:
 
 Make sure that `python3-scapy` is installed on your system: `sudo apt-get install python3-scapy`
 
-You can either run `hackmeapp.py` from a checkout of the code, or install it like any other python project. Keep in mind that a lot of scripts here can be executed only with the root privileges, so you need to run it with sudo.
+You can either run `hackmeapp.py` from a checkout of the code or install it like any other Python project. Remember that most of the scripts here can be executed only with the root privileges, so you need to run it with sudo.
 
 ```bash
 $ sudo pip3 install hackme
@@ -35,8 +37,6 @@ To get the attack description in the terminal, enter `hackme <attack> --desc`
 The following commands include the `--debug` option, which is not required to execute an attack.
 
 ## ARP Spoofing
-
-You can read about ARP spoofing attack [here](https://www.wikiwand.com/en/ARP_spoofing).
 
 Example usage:
 
@@ -57,8 +57,6 @@ Run `sudo hackme arpspoof --help` to get more information.
 
 ## SYN Flood
 
-You can read about SYN flood attack [here](https://www.wikiwand.com/en/SYN_flood).
-
 Example usage:
 
 ```bash
@@ -73,8 +71,6 @@ where:
 Run `sudo hackme synflood --help` to get more information.
 
 ## UDP Flood
-
-You can read about UDP flood attack [here](https://www.wikiwand.com/en/UDP_flood).
 
 Example usage:
 
@@ -92,8 +88,6 @@ Run `sudo hackme udpflood --help` to get more information.
 
 ## MAC Flood
 
-You can read about MAC flood attack [here](https://www.wikiwand.com/en/MAC_flooding).
-
 Example usage:
 
 ```bash
@@ -109,8 +103,6 @@ where:
 Run `sudo hackme macflood --help` to get more information.
 
 ## BPDU Spoofing
-
-On a Layer 2 network, switches running STP, RSTP, MSTP, or VBST exchange BPDUs to calculate a spanning tree and trim the network into a loop-free tree topology. If forged BPDUs are sent to attack a device with edge ports and received by them, the device will automatically change the edge ports to non-edge ports and recalculate the spanning tree. If the bridge priority in the BPDUs sent by an attacker is higher than the priority of the root bridge, the network topology will change, thereby interrupting service traffic.
 
 Example usage:
 
