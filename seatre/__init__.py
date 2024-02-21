@@ -14,14 +14,14 @@
 #
 # Written by:
 #        Nadzeya Hutsko <nadzya.info@gmail.com>
-"""The hackme package"""
+"""The seatre package"""
 
 
-from hackme.arp_spoofing import ARPSpoofer
-from hackme.syn_flood import SYNFlooder
-from hackme.udp_flood import UDPFlooder
-from hackme.mac_flood import MACFlooder
-from hackme.bpdu import BPDUPacket
+from seatre.arp_spoofing import ARPSpoofer
+from seatre.syn_flood import SYNFlooder
+from seatre.udp_flood import UDPFlooder
+from seatre.mac_flood import MACFlooder
+from seatre.bpdu import BPDUPacket
 
 
 __all__ = [

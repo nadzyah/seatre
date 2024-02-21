@@ -2,7 +2,7 @@ venv/
 build/
 dist/
 __pycache__/
-hackme.egg-info/
+seatre.egg-info/
 flycheck*
 .idea
 tmp/

@@ -25,7 +25,7 @@ from warnings import filterwarnings
 
 filterwarnings("ignore")
 
-from hackme import *  # pylint: disable=W0401,C0413  # noqa: F403,E402
+from seatre import *  # pylint: disable=W0401,C0413  # noqa: F403,E402
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -39,19 +39,21 @@ def run_arp_spoofing(subparser, args):
         sys.exit(0)
     if (
         all(
-            args.iface,
-            args.mac,
-            args.gwmac,
-            args.gwip,
-            args.victmac,
-            args.victip,
+            (
+                args.iface,
+                args.mac,
+                args.gwmac,
+                args.gwip,
+                args.victmac,
+                args.victip,
+            )
         )
         is False
     ):
         subparser.print_help()
         sys.exit(1)
-    arp_spoofer.add_gateway(args.gw_mac, args.gw_ip)
-    arp_spoofer.add_victim(args.victim_mac, args.victim_ip)
+    arp_spoofer.add_gateway(args.gwmac, args.gwip)
+    arp_spoofer.add_victim(args.victmac, args.victip)
     arp_spoofer.run()
 
 

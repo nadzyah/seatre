@@ -13,13 +13,15 @@ jobs:
       matrix:
         python: ["3.10"]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python }}
+    - uses: Gr1N/setup-poetry@12c727a3dcf8c1a548d8d041c9d5ef5cebb3ba2e
+      with:
+        poetry-version: "1.6.1"
     - name: Install tox
       run: pip install tox
     - name: Run tests
-      run: |
-        tox
+      run: tox
