@@ -1,5 +1,5 @@
 [project]
-name = "hackme"
+name = "seatre"
 version = "1.0.0"
 authors = [
   { name="Nadzeya Hutsko", email="nadzya.info@gmail.com" },
@@ -21,11 +21,36 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/nadzyah/hackme"
-"Bug Tracker" = "https://github.com/nadzyah/hackme/issues"
+"Homepage" = "https://github.com/nadzyah/seatre"
+"Bug Tracker" = "https://github.com/nadzyah/seatre/issues"
 
 [project.entry-points.console_scripts]
-hackme = "hackmeapp:main"
+seatre = "app:main"
 
 [tool.black]
 line-length = 79
+
+[tool.poetry]
+name = "seatre"
+version = "0.1.0"
+description = "Scripts that implement different network attacks"
+authors = ["nadzyah <nadzya.info@gmail.com>"]
+license = "GPL-3.0 license"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pylintfileheader = "^1.0.0"
+scapy = "^2.5.0"
+wikipedia = "^1.4.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.2.0"
+ruff = "^0.2.2"
+flake8 = "^7.0.0"
+pylint = "^3.0.3"
+twine = "^5.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
