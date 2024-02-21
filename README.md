@@ -8,6 +8,8 @@ A collection of scripts that implement different network attacks. **For informat
 
 Any contributor to this project doesn't take any responsibility for illegal usage of any script from this project.
 
+See the article about how to use it [here](https://medium.com/@nadzeya/exploring-your-networks-vulnerabilities-can-you-hack-it-836aee46c156).
+
 # Installation and Usage
 
 The tested environment:
@@ -35,8 +37,6 @@ The following commands include the `--debug` option, which is not required to ex
 
 ## ARP Spoofing
 
-You can read about ARP spoofing attack [here](https://www.wikiwand.com/en/ARP_spoofing).
-
 Example usage:
 
 ```bash
@@ -56,8 +56,6 @@ Run `sudo seatre arpspoof --help` to get more information.
 
 ## SYN Flood
 
-You can read about SYN flood attack [here](https://www.wikiwand.com/en/SYN_flood).
-
 Example usage:
 
 ```bash
@@ -72,8 +70,6 @@ where:
 Run `sudo seatre synflood --help` to get more information.
 
 ## UDP Flood
-
-You can read about UDP flood attack [here](https://www.wikiwand.com/en/UDP_flood).
 
 Example usage:
 
@@ -91,8 +87,6 @@ Run `sudo seatre udpflood --help` to get more information.
 
 ## MAC Flood
 
-You can read about MAC flood attack [here](https://www.wikiwand.com/en/MAC_flooding).
-
 Example usage:
 
 ```bash
@@ -108,8 +102,6 @@ where:
 Run `sudo seatre macflood --help` to get more information.
 
 ## BPDU Spoofing
-
-On a Layer 2 network, switches running STP, RSTP, MSTP, or VBST exchange BPDUs to calculate a spanning tree and trim the network into a loop-free tree topology. If forged BPDUs are sent to attack a device with edge ports and received by them, the device will automatically change the edge ports to non-edge ports and recalculate the spanning tree. If the bridge priority in the BPDUs sent by an attacker is higher than the priority of the root bridge, the network topology will change, thereby interrupting service traffic.
 
 Example usage:
 
