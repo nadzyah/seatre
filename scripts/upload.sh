@@ -1,5 +1,5 @@
 #!/bin/bash
 source venv/bin/activate
-python -m build
-twine check dist/*
-twine upload --skip-existing dist/*
+python3 -m build
+poetry run twine check dist/*
+poetry run twine upload --skip-existing dist/* --repository pypi

@@ -32,7 +32,7 @@ line-length = 79
 
 [tool.poetry]
 name = "seatre"
-version = "0.1.0"
+version = "1.0.0"
 description = "Scripts that implement different network attacks"
 authors = ["nadzyah <nadzya.info@gmail.com>"]
 license = "GPL-3.0 license"
